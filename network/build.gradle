@@ -1,0 +1,8 @@
+apply plugin: 'com.android.library'
+apply from: "../module_empty_dependencies.gradle"
+apply from: "../dependencies.gradle"
+dependencies {
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation libs.rxjava
+    implementation 'com.google.code.gson:gson:2.8.6'
+}
