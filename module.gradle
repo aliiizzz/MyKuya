@@ -1,5 +1,6 @@
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply from: "../dependencies.gradle"
 
 android {
     compileSdkVersion 29
@@ -37,7 +38,10 @@ dependencies {
     implementation "org.koin:koin-android:$koin_version"
     // or Koin for Lifecycle scoping
     implementation "org.koin:koin-android-scope:$koin_version"
+    implementation libs.rxjava
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
     testImplementation 'junit:junit:4.12'
+    testImplementation "io.mockk:mockk:1.10.0"
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
