@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/home"
+        android:enabled="true"
+        android:icon="@drawable/home_menu"
+        android:title="@string/home"
+        />
+    <item
+        android:id="@+id/myjobs"
+        android:enabled="true"
+        android:icon="@drawable/myjobs_menu"
+        android:title="@string/myjobs"
+        />
+    <item
+        android:id="@+id/support"
+        android:enabled="true"
+        android:icon="@drawable/support_menu"
+        android:title="@string/support"
+        />
+    <item
+        android:id="@+id/news"
+        android:enabled="true"
+        android:icon="@drawable/news_menu"
+        android:title="@string/news"
+        />
+    <item
+        android:id="@+id/account"
+        android:enabled="true"
+        android:icon="@drawable/account_menu"
+        android:title="@string/account"
+        />
+</menu>

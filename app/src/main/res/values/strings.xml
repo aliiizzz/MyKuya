@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">MyKuya</string>
+    <string name="home">Home</string>
+    <string name="myjobs">My Jobs</string>
+    <string name="account">Account</string>
+    <string name="news">News</string>
+    <string name="support">Support</string>
 </resources>
