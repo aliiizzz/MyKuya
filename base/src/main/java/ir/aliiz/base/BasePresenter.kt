@@ -4,11 +4,14 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.lifecycle.ViewModel
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.disposables.Disposable
 
 abstract class BasePresenter<View> : ViewModel(), LifecycleObserver {
 
     private var view: View? = null
     private var viewLifecycle: Lifecycle? = null
+    private val disposables = CompositeDisposable()
 
     fun attachView(view: View, viewLifecycle: Lifecycle) {
         this.view = view
@@ -25,5 +28,10 @@ abstract class BasePresenter<View> : ViewModel(), LifecycleObserver {
     private fun onViewDestroyed() {
         view = null
         viewLifecycle = null
+        disposables.clear()
+    }
+
+    protected fun Disposable.add() = this.also {
+        disposables.add(it)
     }
 }

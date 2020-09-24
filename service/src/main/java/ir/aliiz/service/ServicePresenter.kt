@@ -20,6 +20,7 @@ class ServicePresenter(
     private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
 
     fun init() {
+
         val refreshShare = refreshPublisher.share()
         val refreshLocation = Observable.combineLatest(refreshShare, locationPublisher,
             BiFunction<Unit, LatLng, LatLng> { t1, t2 ->
@@ -32,7 +33,7 @@ class ServicePresenter(
             view()?.promotedServices(Loadable.Loaded(it))
         }, {
             view()?.promotedServices(Loadable.Failed(it))
-        })
+        }).add()
 
         refreshLocation.flatMap {
             serviceRepo.getAllServices(it).subscribeOn(schedulers.io)
@@ -40,27 +41,29 @@ class ServicePresenter(
             view()?.allServices(Loadable.Loaded(it))
         }, {
             view()?.allServices(Loadable.Failed(it))
-        })
+        }).add()
 
-        Observable.just(Unit).mergeWith(refreshShare).flatMap {
+        refreshShare.flatMap {
             newsRepo.getNews().subscribeOn(schedulers.io)
         }.subscribe({
             view()?.updateNews(Loadable.Loaded(it))
         }, {
             view()?.updateNews(Loadable.Failed(it))
-        })
+        }).add()
         userRepo.getProfile().subscribeOn(schedulers.io).subscribe({
             view()?.updateProfile(Loadable.Loaded(it))
         }, {
             view()?.updateProfile(Loadable.Failed(it))
-        })
+        }).add()
         refreshLocation.flatMap {
             locationRepo.getCity(it)
-        }.observeOn(schedulers.io).subscribe({
+        }.subscribeOn(schedulers.io).subscribe({
             view()?.updateCity(it)
         }, {
             it.printStackTrace()
-        })
+        }).add()
+
+        refreshPublisher.onNext(Unit)
     }
 
     fun updateLocation(location: LatLng) {
