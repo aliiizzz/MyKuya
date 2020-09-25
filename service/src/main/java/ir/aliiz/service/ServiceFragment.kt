@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -33,13 +34,31 @@ class ServiceFragment : Fragment(), ServicePresenter.ServiceView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        toolbarService.title = "test"
         presenter.attachView(this, viewLifecycleOwner.lifecycle)
         val featuredAdapter = ServiceAdapter()
-        val allServicesAdapter = ServiceAdapter()
+        val allServicesAdapter = ServiceAdapter().apply {
+            isExpanded = false
+            updateImage(isExpanded)
+        }
+        imageServiceExpanded.setOnClickListener {
+            recyclerServiceAll.adapter().apply {
+                isExpanded = !isExpanded
+                notifyDataSetChanged()
+                updateImage(isExpanded)
+            }
+        }
         recyclerServiceAll.adapter = allServicesAdapter
         recyclerServiceFeatureCardFeatures.adapter = featuredAdapter
+        recyclerServiceNews.adapter = NewsAdapter()
         presenter.updateLocation(LatLng(1.0, 1.0))
+        textServiceLocation.setCompoundDrawablesWithIntrinsicBounds(
+            ContextCompat.getDrawable(context!!, R.drawable.ic_location_pin_with_hole_and_shadow),
+            null, null, null
+        )
+    }
+
+    private fun updateImage(expanded: Boolean) {
+        imageServiceExpanded.rotationX = if (expanded) 0f else 180f
     }
 
     override fun promotedServices(data: Loadable<List<Service>>) {
@@ -69,7 +88,10 @@ class ServiceFragment : Fragment(), ServicePresenter.ServiceView {
 
     override fun updateNews(data: Loadable<List<News>>) {
         data.onLoad {
-
+            (recyclerServiceNews.adapter as NewsAdapter).apply {
+                items = this@onLoad
+                notifyDataSetChanged()
+            }
         }
         data.onFail {
 

@@ -14,5 +14,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/textServiceItemTitle"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         />
 </LinearLayout>

@@ -44,7 +44,7 @@ class ServicePresenter(
         }).add()
 
         refreshShare.flatMap {
-            newsRepo.getNews().subscribeOn(schedulers.io)
+            newsRepo.getNews().subscribeOn(schedulers.io).observeOn(schedulers.main)
         }.subscribe({
             view()?.updateNews(Loadable.Loaded(it))
         }, {
@@ -57,7 +57,7 @@ class ServicePresenter(
         }).add()
         refreshLocation.flatMap {
             locationRepo.getCity(it)
-        }.subscribeOn(schedulers.io).subscribe({
+        }.subscribeOn(schedulers.io).observeOn(schedulers.main).subscribe({
             view()?.updateCity(it)
         }, {
             it.printStackTrace()

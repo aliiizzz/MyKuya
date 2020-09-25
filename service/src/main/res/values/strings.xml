@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="features">Features</string>
+    <string name="featured">Featured</string>
     <string name="welcome_name">Welcome, %s!</string>
+    <string name="learn_more">Learn More</string>
+    <string name="app_name">My Kuya</string>
+    <string name="whats_new">What\'s New</string>
 </resources>
