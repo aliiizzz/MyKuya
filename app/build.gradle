@@ -6,3 +6,10 @@ android {
         applicationId "ir.aliiz.mykuya"
     }
 }
+
+dependencies {
+    implementation project(":service")
+    implementation project(":network")
+    implementation project(":data")
+    implementation project(":base")
+}

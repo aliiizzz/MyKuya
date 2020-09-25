@@ -19,7 +19,7 @@ class ServicePresenter(
     private val locationPublisher: PublishSubject<LatLng> = PublishSubject.create()
     private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
 
-    fun init() {
+    override fun viewAttached() {
 
         val refreshShare = refreshPublisher.share()
         val refreshLocation = Observable.combineLatest(refreshShare, locationPublisher,
@@ -29,7 +29,7 @@ class ServicePresenter(
         refreshLocation.flatMap {
             serviceRepo.getFeaturedServices(it)
                 .subscribeOn(schedulers.io)
-        }.subscribe({
+        }.observeOn(schedulers.main).subscribe({
             view()?.promotedServices(Loadable.Loaded(it))
         }, {
             view()?.promotedServices(Loadable.Failed(it))
@@ -37,7 +37,7 @@ class ServicePresenter(
 
         refreshLocation.flatMap {
             serviceRepo.getAllServices(it).subscribeOn(schedulers.io)
-        }.subscribe ({
+        }.observeOn(schedulers.main).subscribe ({
             view()?.allServices(Loadable.Loaded(it))
         }, {
             view()?.allServices(Loadable.Failed(it))
@@ -50,7 +50,7 @@ class ServicePresenter(
         }, {
             view()?.updateNews(Loadable.Failed(it))
         }).add()
-        userRepo.getProfile().subscribeOn(schedulers.io).subscribe({
+        userRepo.getProfile().subscribeOn(schedulers.io).observeOn(schedulers.main).subscribe({
             view()?.updateProfile(Loadable.Loaded(it))
         }, {
             view()?.updateProfile(Loadable.Failed(it))

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="features">Features</string>
+    <string name="welcome_name">Welcome, %s!</string>
+</resources>

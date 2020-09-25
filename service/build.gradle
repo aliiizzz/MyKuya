@@ -3,5 +3,8 @@ apply from: '../module.gradle'
 
 dependencies {
     implementation project(":base")
+    testImplementation project(":base")
     implementation project(":data")
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 }

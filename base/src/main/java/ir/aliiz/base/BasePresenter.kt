@@ -18,7 +18,10 @@ abstract class BasePresenter<View> : ViewModel(), LifecycleObserver {
         this.viewLifecycle = viewLifecycle
 
         viewLifecycle.addObserver(this)
+        viewAttached()
     }
+
+    abstract fun viewAttached()
 
     protected fun view(): View? {
         return view

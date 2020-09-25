@@ -3,13 +3,9 @@ package ir.aliiz.service
 import androidx.lifecycle.Lifecycle
 import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
-import io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import io.reactivex.rxjava3.schedulers.TestScheduler
 import ir.aliiz.base.Loadable
-import ir.aliiz.base.RxRule
 import ir.aliiz.base.Schedulers
 import ir.aliiz.data.repo.*
 import org.junit.After
@@ -18,10 +14,8 @@ import org.junit.Before
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
-import org.junit.runner.Description
-import org.junit.runners.model.Statement
 import java.util.concurrent.TimeUnit
+import ir.aliiz.base.RxRule
 
 class ServicePresenterTest {
     private val testScheduler = TestScheduler()
@@ -69,7 +63,6 @@ class ServicePresenterTest {
         )
         val presenter = createPresenter()
         presenter.attachView(view, lifecycle)
-        presenter.init()
         testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
         val newsSlot = slot<Loadable<List<News>>>()
         verify {
@@ -90,7 +83,6 @@ class ServicePresenterTest {
         )
         val presenter = createPresenter()
         presenter.attachView(view, lifecycle)
-        presenter.init()
         testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
         val userSlot = slot<Loadable<User>>()
         verify {
@@ -109,7 +101,6 @@ class ServicePresenterTest {
         } returns Observable.error<User>(Exception("error"))
         val presenter = createPresenter()
         presenter.attachView(view, lifecycle)
-        presenter.init()
         testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
         val userSlot = slot<Loadable<User>>()
         verify {
@@ -128,7 +119,6 @@ class ServicePresenterTest {
         } returns Observable.just("tehran")
         val presenter = createPresenter()
         presenter.attachView(view, lifecycle)
-        presenter.init()
         testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
         presenter.updateLocation(LatLng(1.0, 1.0))
         testScheduler.advanceTimeBy(2000, TimeUnit.MILLISECONDS)
@@ -151,7 +141,6 @@ class ServicePresenterTest {
         } returns Observable.just(promotions)
         val presenter = createPresenter()
         presenter.attachView(view, lifecycle)
-        presenter.init()
         testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)
         presenter.updateLocation(LatLng(1.0, 1.0))
         testScheduler.advanceTimeBy(1000, TimeUnit.MILLISECONDS)

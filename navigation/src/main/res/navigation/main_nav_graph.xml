@@ -4,5 +4,11 @@
     app:startDestination="@id/fragment_main">
     <fragment
         android:id="@+id/fragment_main"
-        android:name="ir.aliiz.mykuya.MainFragment"/>
+        android:name="ir.aliiz.mykuya.MainFragment">
+        <action
+            android:id="@+id/action_main_to_service"
+            app:destination="@id/service_nav_graph"
+            />
+    </fragment>
+    <include app:graph="@navigation/service_nav_graph" />
 </navigation>
