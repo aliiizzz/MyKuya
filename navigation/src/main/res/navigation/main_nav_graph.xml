@@ -9,6 +9,15 @@
             android:id="@+id/action_main_to_service"
             app:destination="@id/service_nav_graph"
             />
+        <action
+            android:id="@+id/action_main_to_map"
+            app:destination="@id/map_nav_graph">
+            <argument
+                android:name="location"
+                app:argType="ir.aliiz.navigation.LocationNto"
+                />
+        </action>
     </fragment>
     <include app:graph="@navigation/service_nav_graph" />
+    <include app:graph="@navigation/map_nav_graph" />
 </navigation>
