@@ -12,11 +12,9 @@ class PrefLocationStorage(val context: Context) : LocalStorage<LatLng> {
     private val subject = BehaviorSubject.create<LatLng>()
 
     init {
-        val lat = pref.getString("latitude", null)
-        val lng = pref.getString("longitude", null)
-        if (lat != null && lng != null) {
-            subject.onNext(LatLng(lat.toDouble(), lng.toDouble()))
-        }
+        val lat = pref.getString("latitude", "1")
+        val lng = pref.getString("longitude", "1")
+        subject.onNext(LatLng(lat!!.toDouble(), lng!!.toDouble()))
     }
     override fun save(data: LatLng) {
         pref.edit().apply {

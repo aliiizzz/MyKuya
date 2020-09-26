@@ -6,4 +6,5 @@ import org.koin.dsl.module
 
 val mainModule = module {
     single { Schedulers(AndroidSchedulers.mainThread(), rxscheduler.io()) }
+    factory { MainPresenter(get(), get()) }
 }

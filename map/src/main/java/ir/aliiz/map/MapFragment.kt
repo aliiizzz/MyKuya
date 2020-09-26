@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import ir.aliiz.navigation.LocationNto
@@ -20,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_map.*
 import org.koin.android.ext.android.inject
 
 class MapFragment : Fragment(), MapPresenter.MapView {
+    private var map: GoogleMap? = null
     private val args: MapFragmentArgs by navArgs()
 
     private val mapPresenter: MapPresenter by inject()
@@ -41,6 +43,14 @@ class MapFragment : Fragment(), MapPresenter.MapView {
                 it.translationY -= it.height / 2
             }
         }
+
+        buttonMapSubmit.setOnClickListener {
+            map?.cameraPosition?.target?.let {
+                mapPresenter.submitLocation(
+                    ir.aliiz.data.repo.LatLng(it.latitude, it.longitude)
+                )
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -57,6 +67,7 @@ class MapFragment : Fragment(), MapPresenter.MapView {
 
     private fun loadMap(showMyLocation: Boolean) {
         (childFragmentManager.findFragmentById(R.id.fragmentMap) as SupportMapFragment).getMapAsync {
+            map = it
             it.moveCamera(
                 CameraUpdateFactory.newLatLngZoom(
                     args.location.toLatLng(), 13f
