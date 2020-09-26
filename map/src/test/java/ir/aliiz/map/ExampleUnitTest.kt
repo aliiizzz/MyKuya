@@ -1,4 +1,4 @@
-package ir.aliiz.navigation
+package ir.aliiz.map
 
 import org.junit.Test
 
