@@ -13,16 +13,17 @@ class ServicePresenter(
     private val newsRepo: NewsRepo,
     private val userRepo: UserRepo,
     private val locationRepo: LocationRepo,
+    private val serviceNotifier: ServiceNotifier,
     private val schedulers: Schedulers
 ): BasePresenter<ServicePresenter.ServiceView>() {
 
-    private val locationPublisher: PublishSubject<LatLng> = PublishSubject.create()
     private val refreshPublisher: PublishSubject<Unit> = PublishSubject.create()
+    private val latestLocation = PublishSubject.create<Unit>()
 
     override fun viewAttached() {
 
         val refreshShare = refreshPublisher.share()
-        val refreshLocation = Observable.combineLatest(refreshShare, locationPublisher,
+        val refreshLocation = Observable.combineLatest(refreshShare, locationRepo.getLocation(),
             BiFunction<Unit, LatLng, LatLng> { t1, t2 ->
                 t2
             }).share()
@@ -63,15 +64,22 @@ class ServicePresenter(
             it.printStackTrace()
         }).add()
 
+        Observable.zip(latestLocation, locationRepo.getLocation(), BiFunction<Unit, LatLng, LatLng> { t1, t2 ->
+            t2
+        }).subscribeOn(schedulers.io).observeOn(schedulers.main).subscribe({
+            serviceNotifier.selectService(ServiceNotifier.Service.Map(it))
+        }, {
+            it.printStackTrace()
+        }).add()
         refreshPublisher.onNext(Unit)
-    }
-
-    fun updateLocation(location: LatLng) {
-        locationPublisher.onNext(location)
     }
 
     fun refreshNews() {
         refreshPublisher.onNext(Unit)
+    }
+
+    fun requestMap() {
+        latestLocation.onNext(Unit)
     }
 
     interface ServiceView {
@@ -80,5 +88,6 @@ class ServicePresenter(
         fun updateNews(data: Loadable<List<News>>)
         fun updateProfile(data: Loadable<User>)
         fun updateCity(name: String)
+        fun loadMap(location: LatLng)
     }
 }

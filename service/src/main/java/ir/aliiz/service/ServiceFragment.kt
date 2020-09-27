@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliiz.base.Loadable
 import ir.aliiz.base.onFail
@@ -15,10 +15,9 @@ import ir.aliiz.data.repo.LatLng
 import ir.aliiz.data.repo.News
 import ir.aliiz.data.repo.Service
 import ir.aliiz.data.repo.User
+import ir.aliiz.navigation.LocationNto
 import kotlinx.android.synthetic.main.fragment_service.*
 import org.koin.android.ext.android.inject
-import kotlin.math.ceil
-import kotlin.math.min
 
 class ServiceFragment : Fragment(), ServicePresenter.ServiceView {
 
@@ -50,11 +49,14 @@ class ServiceFragment : Fragment(), ServicePresenter.ServiceView {
         recyclerServiceAll.adapter = allServicesAdapter
         recyclerServiceFeatureCardFeatures.adapter = featuredAdapter
         recyclerServiceNews.adapter = NewsAdapter()
-        presenter.updateLocation(LatLng(1.0, 1.0))
         textServiceLocation.setCompoundDrawablesWithIntrinsicBounds(
             ContextCompat.getDrawable(context!!, R.drawable.ic_location_pin_with_hole_and_shadow),
             null, null, null
         )
+
+        textServiceLocation.setOnClickListener {
+            presenter.requestMap()
+        }
     }
 
     private fun updateImage(expanded: Boolean) {
@@ -111,5 +113,14 @@ class ServiceFragment : Fragment(), ServicePresenter.ServiceView {
         textServiceLocation.text = name
     }
 
+    override fun loadMap(location: LatLng) {
+        findNavController().navigate(ServiceFragmentDirections.actionServiceToMap(
+            location.toLocationNto()
+        ))
+    }
+
     private fun RecyclerView.adapter() = (adapter as ServiceAdapter)
 }
+
+
+fun LatLng.toLocationNto() = LocationNto(latitude, longitude)

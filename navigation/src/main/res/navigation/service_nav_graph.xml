@@ -7,5 +7,15 @@
     <fragment
         android:id="@+id/fragment_service"
         android:name="ir.aliiz.service.ServiceFragment"
-        />
+        >
+        <action
+            android:id="@+id/action_service_to_map"
+            app:destination="@id/map_nav_graph">
+            <argument
+                android:name="location"
+                app:argType="ir.aliiz.navigation.LocationNto"
+                />
+        </action>
+    </fragment>
+    <include app:graph="@navigation/map_nav_graph" />
 </navigation>
