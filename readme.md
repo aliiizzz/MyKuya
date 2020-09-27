@@ -18,7 +18,7 @@ We need you to implement MyKuya’s pages like home and map:
 - Koin
 - JUnit4
 - MockK
-_ Google Maps
+- Google Maps
 
 ## Description
 This project is a Modular project. 
