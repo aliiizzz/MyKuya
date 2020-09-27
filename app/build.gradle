@@ -4,6 +4,7 @@ apply from: "../module.gradle"
 android {
     defaultConfig {
         applicationId "ir.aliiz.mykuya"
+        resValue "string", "maps_api_key", ""
     }
 }
 
